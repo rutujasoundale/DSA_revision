@@ -1,4 +1,4 @@
-# DSA Revision Roadmap — Pattern & Algorithm Mapping
+# DSA Revision Roadmap — Pattern
 **Target:** Service-based & mass-recruiter placements (TCS NQT/CodeVita, Capgemini, Cognizant, Deloitte NLA, Infosys, Wipro, etc.)
 **Timeline:** 8 weeks | **Pace:** 4 hrs/day | **Platform:** LeetCode , GFG
 
