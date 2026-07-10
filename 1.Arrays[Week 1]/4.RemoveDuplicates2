@@ -1,1 +1,95 @@
+```java
+class Solution {
+    public int removeDuplicates(int[] nums) {
+//Check if length is less than 2 if it is return length
+        if(nums.length<=2){
+            return nums.length;
+        }
+//Start with index 2 as it is said at most 2 duplicates allowed iit is sorted array so first two index will be allowed
+        int k=2;
+        for(int i=2;i<nums.length;i++){
+            if(nums[i]!=nums[k-2]){
+//Copy valid elemets 
+            nums[k]=nums[i];
+            k++;
+            }
+            
+        }
+        return k;
+    }
+}
+```
+Why compare with k-2?
 
+The valid portion of the array is
+
+0 ... k-1
+
+If
+
+nums[i] == nums[k-2]
+
+then there are already two copies of this value in the valid portion.
+
+Example
+
+Valid array
+
+1 1
+^ ^
+0 1
+
+k = 2
+
+Current element
+
+1
+
+Compare with
+
+nums[k-2]
+=
+nums[0]
+=
+1
+
+Equal → already have two → skip.
+
+Example
+
+Valid array
+
+1 1 2 2
+k=4
+
+Current
+
+2
+
+Compare
+
+nums[2]
+
+Equal
+
+Already two 2s.
+
+Skip.
+
+Time Complexity
+Time: O(n) — each element is processed once.
+Space: O(1) — only a few variables are used.
+Interview follow-up
+
+A common extension is: "Allow at most k duplicates instead of 2."
+
+The same idea generalizes easily:
+```
+int index = k;
+
+for (int i = k; i < nums.length; i++) {
+    if (nums[i] != nums[index - k]) {
+        nums[index++] = nums[i];
+    }
+}
+```
