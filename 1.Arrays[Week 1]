@@ -1,1 +1,388 @@
+Approach 1-Concate and sort
+Simple flow 
+1.combine both arrays
 
+2. Sort the combined array
+
+3. Distribute to nums1
+```java
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int merged[] = new int[m+n];
+        //copy elements
+        for(int i=0;i<m;i++){
+            merged[i]=nums1[i];
+        }
+        for(int j=0;j<n;j++){
+            merged[m+j]=nums2[j];
+         }
+//sort the merged array
+         Arrays.sort(merged);
+//disribute 
+         for(int i=0;i<m+n;i++){
+            nums1[i]=merged[i];
+         }
+
+
+    }
+}
+```
+Time complexity : O((m+n)log(m+n))
+Space Complexity : O(n+m)
+
+Approach 2-Two pointers
+Step-by-Step Implementation:
+
+Initialize two pointers: i = 0 for traversing arr1, j = 0 for traversing arr2
+Create an empty array merged = []{Use k for traversing merged}
+Merge the elements into merged: While both i < n and j < m:
+=> If arr1[i] <= arr2[j], append arr1[i] to merged and increment i
+=> Else, append arr2[j] to merged and increment j
+Append remaining elements (if any):
+=> While i < n, append arr1[i] to merged and increment i
+=> While j < m, append arr2[j] to merged and increment j
+Distribute the merged elements back:
+=> Copy the first n elements of merged to arr1
+=> Copy the remaining m elements to arr2
+```java
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int[] merged=new int[m+n];
+        int k=0;
+int i=0;
+int j=0;
+while{i<m && j<n){
+
+    if(nums1[i]<=nums2[j]){
+merged[k++]=nums1[i++];
+else{
+merged[k++]=nums2[j++];
+}
+
+}
+while(i<m) merged[k++]=nums1[i++];
+while(j<n) merged[k++]=nums2[j++];
+for(int i=0;i<m+n;i++){
+nums1[i]=merged[i];
+}
+
+    }
+}
+```
+
+O(n + m) Time and O(n + m) Space
+
+
+|Approach|	Time|	Space	|Interview |Preference|
+|Copy + Sort|	O((m+n) log(m+n))|	O(m+n)	|❌ Usually not preferred|
+|Extra array + Two pointers|	O(m+n)|	O(m+n)|	✅ Good|
+|Three pointers from end (in-place)|	O(m+n)|	O(1)|	⭐ Best and most commonly expected|
+
+Approach 3 - For further space optimization to O(1)
+This is the **optimal solution** for LeetCode 88 and a very common interview question.
+
+The trick is:
+
+> Instead of filling `nums1` from the front (which would overwrite useful values), fill it **from the back**, where there are already empty (`0`) slots reserved.
+
+---
+
+## Example
+
+```
+nums1 = [1,2,3,0,0,0]
+m = 3
+
+nums2 = [2,5,6]
+n = 3
+```
+
+Valid elements:
+
+```
+nums1 : [1,2,3]
+nums2 : [2,5,6]
+```
+
+Final answer should be
+
+```
+[1,2,2,3,5,6]
+```
+
+---
+
+# Step 1: Create three pointers
+
+```
+i = m - 1
+j = n - 1
+k = m + n - 1
+```
+
+So
+
+```
+i = 2   -> points to 3
+j = 2   -> points to 6
+k = 5   -> last index of nums1
+```
+
+Visualize it:
+
+```
+nums1
+
+0 1 2 3 4 5
+-------------
+1 2 3 0 0 0
+    ^
+    i
+
+nums2
+
+0 1 2
+------
+2 5 6
+    ^
+    j
+
+k = 5
+```
+
+---
+
+# Step 2: Compare the largest elements
+
+Compare
+
+```
+nums1[i] = 3
+nums2[j] = 6
+```
+
+Largest is **6**.
+
+Put it at `k`.
+
+```
+nums1[k] = nums2[j]
+```
+
+Now
+
+```
+1 2 3 0 0 6
+```
+
+Move
+
+```
+j--
+k--
+```
+
+```
+i=2
+j=1
+k=4
+```
+
+---
+
+# Step 3
+
+Compare
+
+```
+3 vs 5
+```
+
+Largest is **5**
+
+```
+1 2 3 0 5 6
+```
+
+Move
+
+```
+j--
+k--
+```
+
+Now
+
+```
+i=2
+j=0
+k=3
+```
+
+---
+
+# Step 4
+
+Compare
+
+```
+3 vs 2
+```
+
+Largest is **3**
+
+```
+1 2 3 3 5 6
+```
+
+Move
+
+```
+i--
+k--
+```
+
+Now
+
+```
+i=1
+j=0
+k=2
+```
+
+---
+
+# Step 5
+
+Compare
+
+```
+2 vs 2
+```
+
+Either one is fine.
+
+Suppose we choose from `nums1`.
+
+```
+1 2 2 3 5 6
+```
+
+Move
+
+```
+i--
+k--
+```
+
+Now
+
+```
+i=0
+j=0
+k=1
+```
+
+---
+
+# Step 6
+
+Compare
+
+```
+1 vs 2
+```
+
+Largest is **2**
+
+```
+1 2 2 3 5 6
+```
+
+Move
+
+```
+j--
+k--
+```
+
+Now
+
+```
+j=-1
+```
+
+We're done because all elements from `nums2` have been merged.
+
+---
+
+# Why start from the end?
+
+Suppose you started filling from the front:
+
+```
+nums1
+
+1 2 3 0 0 0
+^
+```
+
+If you insert `2` at index 1, you'll overwrite the original `2` or `3` before you've had a chance to compare them.
+
+By filling from the back, you only overwrite the empty space reserved at the end of `nums1`, so no useful data is lost.
+
+---
+
+# Code
+
+```java
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+
+        int i = m - 1;          // Last valid element in nums1
+        int j = n - 1;          // Last element in nums2
+        int k = m + n - 1;      // Last position in nums1
+
+        while (i >= 0 && j >= 0) {
+
+            if (nums1[i] > nums2[j]) {
+                nums1[k] = nums1[i];
+                i--;
+            } else {
+                nums1[k] = nums2[j];
+                j--;
+            }
+
+            k--;
+        }
+
+        // Copy any remaining elements from nums2
+        while (j >= 0) {
+            nums1[k] = nums2[j];
+            j--;
+            k--;
+        }
+    }
+}
+```
+
+---
+
+## Dry run summary
+
+| `nums1[i]` | `nums2[j]` | Placed at `nums1[k]` | `nums1` after placement |
+| ---------- | ---------- | -------------------- | ----------------------- |
+| 3          | 6          | 6                    | `[1,2,3,0,0,6]`         |
+| 3          | 5          | 5                    | `[1,2,3,0,5,6]`         |
+| 3          | 2          | 3                    | `[1,2,3,3,5,6]`         |
+| 2          | 2          | 2                    | `[1,2,2,3,5,6]`         |
+| 1          | 2          | 2                    | `[1,2,2,3,5,6]`         |
+
+---
+
+### Complexity
+
+* **Time Complexity:** **O(m + n)** — each element is processed at most once.
+* **Space Complexity:** **O(1)** — no extra array is used.
+
+This "fill from the end using three pointers" pattern is worth remembering because it also appears in other interview problems involving **in-place merging** of sorted data.
