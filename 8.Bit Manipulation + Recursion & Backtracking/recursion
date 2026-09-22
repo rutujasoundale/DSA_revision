@@ -1,0 +1,62 @@
+# Recursion Intro
+
+## What is recursion?
+Recursion is a technique where a function calls itself to solve a smaller version of the same problem.
+
+### Key idea
+A recursive function usually has two parts:
+1. Base case: stops the recursion
+2. Recursive case: reduces the problem toward the base case
+
+### Example: Factorial
+```java
+class Solution {
+    public static int factorial(int n) {
+        // Base case
+        if (n == 0 || n == 1) {
+            return 1;
+        }
+
+        // Recursive case
+        return n * factorial(n - 1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(factorial(5)); // 120
+    }
+}
+```
+
+### Example: Fibonacci
+```java
+class Solution {
+    public static int fib(int n) {
+        if (n == 0 || n == 1) {
+            return n;
+        }
+        return fib(n - 1) + fib(n - 2);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(fib(6)); // 8
+    }
+}
+```
+
+## Important interview points
+- Always define a base case
+- Reduce the problem size each time
+- Avoid infinite recursion
+- Recursion uses stack memory
+- Time complexity depends on the problem
+
+## Common recursion patterns
+- factorial
+- fibonacci
+- sum of digits
+- power calculation
+- tree traversal
+- backtracking
+
+## One-line summary
+Recursion is solving a problem by breaking it into smaller identical subproblems until a base case is reached.
